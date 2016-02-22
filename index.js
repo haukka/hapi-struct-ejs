@@ -1,14 +1,18 @@
 var Hapi = require('hapi');
 var router = require('./route/routes');
-var init = require('./config/init');
 
 var server = new Hapi.Server();
-server.connection({ port: init.server.port });
+server.connection({
+    port: 3000,
+    host: 'localhost',
+    labels: ["authent-app"]
+});
 
 server.register([require('hapi-auth-cookie'), require('vision')], function (err) {
     if (err) {
         throw err;
     }
+
     server.auth.strategy('session', 'cookie', {
         password: 'secret',
         cookie: 'session',
@@ -29,6 +33,9 @@ server.register([require('hapi-auth-cookie'), require('vision')], function (err)
 
 server.route(router.listRoutes);
 
-server.start(function() {
-    console.log("The server has started on port: " + server.info.port);
+server.start(function(err) {
+    if (err) {
+	throw err;
+    }
+    console.log("Hapi start on port: 3000");
 });

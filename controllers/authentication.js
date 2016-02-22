@@ -34,11 +34,11 @@ exports.register = {
 	}
   },
   handler: function(request, reply) {
-      var newUser = new User({
+      var Userinfo = new User({
 	  email: request.payload.email
       });
       var pass = request.payload.password;
-      User.register(newUser, pass, function(err, user) {
+      User.register(Userinfo, pass, function(err, user) {
 	  if (err) {
               return reply(err);
 	  }
